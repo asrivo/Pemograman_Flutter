@@ -8,34 +8,50 @@ import com.asrivo.mahasiswa.entity.Mahasiswa;
 import com.asrivo.mahasiswa.service.MahasiswaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
- * @author LABP2COMDOSEN
+ * @author asriv
  */
 @RestController
 @RequestMapping("api/v1/mahasiswa")
 public class MahasiswaController {
-    private final MahasiswaService mahasiswaService;
-
-    @Autowired
-    public MahasiswaController(MahasiswaService mahasiswaService) {
-        this.mahasiswaService = mahasiswaService;
-    }
+     @Autowired
+    private MahasiswaService mahasiswaService;
     
     @GetMapping
-    public List<Mahasiswa> getAllMahasiswa(){
-        return mahasiswaService.getAllMahasiswa();
+    public List<Mahasiswa> getAll(){
+        return mahasiswaService.getAll();
+    }
+    
+    @GetMapping(path = "{id}")
+    public Mahasiswa getMahasiswa(@PathVariable("id") Long id){
+        return mahasiswaService.getMahasiswa(id); 
     }
     
     @PostMapping
-    public void insertMahasiswa(@RequestBody Mahasiswa mahasiswa){
-        mahasiswaService.insertMahasiswa(mahasiswa); 
+    public void insert(@RequestBody Mahasiswa mahasiswa){
+        mahasiswaService.insert(mahasiswa); 
     }
     
+    @DeleteMapping(path = "{mahasiswaId}")
+    public void delete(@PathVariable("mahasiswaId") Long id) {
+        mahasiswaService.delete(id); 
+    }
+    
+    @PutMapping(path = "{mahasiswaId}")
+    public void update(@PathVariable("mahasiswaId") Long MahasiswaId,
+            @RequestParam(required = false) String nama,
+            @RequestParam(required = false) String email){
+        mahasiswaService.update(MahasiswaId, nama, email); 
+    }    
 }
